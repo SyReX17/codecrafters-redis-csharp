@@ -1,7 +1,5 @@
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Channels;
 
 // You can use print statements as follows for debugging, they'll be visible when running tests.
 Console.WriteLine("Logs from your program will appear here!");
@@ -15,20 +13,34 @@ using var socket = server.AcceptSocket();
 var stream = new NetworkStream(socket);
 using var reader = new StreamReader(stream);
 using var writer = new StreamWriter(stream);
-
 writer.AutoFlush = true;
 
-string? inputLine;
-while (!string.IsNullOrEmpty(inputLine = reader.ReadLine()))
+try
 {
-    if (inputLine == "ping")
+    var inputLine = reader.ReadLine();
+    while (!string.IsNullOrEmpty(inputLine))
     {
-        Console.WriteLine(inputLine);
-        writer.WriteLine("+PONG\r");
-        writer.Flush();
-        break;
+        if (inputLine == "ping")
+        {
+            writer.WriteLine("+PONG\r");
+            writer.Flush();
+            break;
+        }
     }
 }
-Console.WriteLine(inputLine);
-socket.Close();
+catch (IOException e)
+{
+    Console.WriteLine(e.Message);
+}
+finally
+{
+    try
+    {
+        socket.Close();
+    }
+    catch (IOException e)
+    {
+        Console.WriteLine(e.Message);
+    }
+}
 
