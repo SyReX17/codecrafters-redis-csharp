@@ -22,6 +22,8 @@ while (!string.IsNullOrEmpty(inputLine = reader.ReadLine()))
     {
         Console.WriteLine(inputLine);
         writer.WriteLine("+PONG\r");
+        writer.Flush();
         break;
     }
 }
+
