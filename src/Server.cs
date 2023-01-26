@@ -10,10 +10,12 @@ TcpListener server = new TcpListener(IPAddress.Any, 6379);
 server.Start();
 server.AcceptSocket(); // wait for client
 
-using var client = server.AcceptTcpClient();
-var stream = client.GetStream();
+using var socket = server.AcceptSocket();
+var stream = new NetworkStream(socket);
 using var reader = new StreamReader(stream);
 using var writer = new StreamWriter(stream);
+
+writer.AutoFlush = true;
 
 string inputLine;
 while (!string.IsNullOrEmpty(inputLine = reader.ReadLine()))
