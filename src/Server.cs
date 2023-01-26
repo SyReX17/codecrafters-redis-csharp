@@ -10,7 +10,7 @@ server.Start();
 server.AcceptSocket(); // wait for client
 
 using var socket = server.AcceptSocket();
-var stream = new NetworkStream(socket);
+using var stream = new NetworkStream(socket);
 using var reader = new StreamReader(stream);
 using var writer = new StreamWriter(stream);
 writer.AutoFlush = true;
