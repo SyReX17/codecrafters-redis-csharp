@@ -10,20 +10,18 @@ TcpListener server = new TcpListener(IPAddress.Any, 6379);
 server.Start();
 server.AcceptSocket(); // wait for client
 
-using (var client = server.AcceptTcpClient())
-{
-    var stream = client.GetStream();
-    using var reader = new StreamReader(stream);
-    using var writer = new StreamWriter(stream);
+using var client = server.AcceptTcpClient();
+var stream = client.GetStream();
+using var reader = new StreamReader(stream);
+using var writer = new StreamWriter(stream);
 
-    string inputLine;
-    while (!string.IsNullOrEmpty(inputLine = reader.ReadLine()))
+string inputLine;
+while (!string.IsNullOrEmpty(inputLine = reader.ReadLine()))
+{
+    if (inputLine == "ping")
     {
-        if (inputLine == "ping")
-        {
-            writer.WriteLine("+PONG\r");
-            break;
-        }
+        Console.WriteLine(inputLine);
+        writer.WriteLine("+PONG\r");
+        break;
     }
 }
-
