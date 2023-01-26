@@ -37,7 +37,6 @@ for (;;)
         };
 
         var responseBuffer = Encoding.ASCII.GetBytes(response);
-        
         stream.Write(responseBuffer, 0, responseBuffer.Length);
     }
 }
