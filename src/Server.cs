@@ -17,9 +17,10 @@ using var writer = new StreamWriter(stream);
 
 writer.AutoFlush = true;
 
-string inputLine;
+string? inputLine;
 while (!string.IsNullOrEmpty(inputLine = reader.ReadLine()))
 {
+    Console.WriteLine(inputLine);
     if (inputLine == "ping")
     {
         Console.WriteLine(inputLine);
