@@ -30,4 +30,5 @@ while (!string.IsNullOrEmpty(inputLine = reader.ReadLine()))
     }
 }
 Console.WriteLine(inputLine);
+socket.Close();
 
