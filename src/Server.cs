@@ -7,8 +7,6 @@ Console.WriteLine("Logs from your program will appear here!");
 // Uncomment this block to pass the first stage
 TcpListener server = new TcpListener(IPAddress.Any, 6379);
 server.Start();
-server.AcceptSocket(); // wait for client
-
 using var socket = server.AcceptSocket();
 using var stream = new NetworkStream(socket);
 using var reader = new StreamReader(stream);
