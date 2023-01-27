@@ -20,7 +20,7 @@ try
     {
         if (inputLine == "ping")
         {
-            writer.WriteLine("+PONG\r");
+            writer.Write("+PONG\r\n");
             writer.Flush();
             break;
         }
