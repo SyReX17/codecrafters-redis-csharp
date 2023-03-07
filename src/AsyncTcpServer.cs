@@ -29,7 +29,7 @@ public class AsyncTcpServer
     private static void AcceptCallback(IAsyncResult ar)
     {
         AllCompleted.Set();
-        var client = (TcpClient)ar.AsyncState!;
+        var client = (TcpClient)ar.AsyncState;
         var stream = client.GetStream();
         
         using var reader = new StreamReader(stream);
