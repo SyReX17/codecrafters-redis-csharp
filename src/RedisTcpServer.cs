@@ -3,7 +3,7 @@ using System.Net.Sockets;
 
 namespace codecrafters_redis;
 
-public class AsyncTcpServer
+public class RedisTcpServer
 {
     public void RunServer()
     {
