@@ -5,9 +5,7 @@ namespace codecrafters_redis;
 
 public class AsyncTcpServer
 {
-    private static readonly ManualResetEvent AllCompleted = new ManualResetEvent(false);
-
-    public static void RunServer()
+    public void RunServer()
     {
         var server = new TcpListener(IPAddress.Any, 6379);
         server.Start();
@@ -15,9 +13,10 @@ public class AsyncTcpServer
         {
             while (true)
             {
-                AllCompleted.Reset();
-                server.BeginAcceptTcpClient(AcceptCallback, server);
-                AllCompleted.WaitOne();
+                var newClient = server.AcceptTcpClient();
+
+                Thread t = new Thread(HandleClient);
+                t.Start(newClient);
             }
         }
         catch (IOException e)
@@ -26,10 +25,9 @@ public class AsyncTcpServer
         }
     }
 
-    private static void AcceptCallback(IAsyncResult ar)
+    private void HandleClient(object obj)
     {
-        AllCompleted.Set();
-        var client = (TcpClient)ar.AsyncState;
+        var client = (TcpClient)obj;
         var stream = client.GetStream();
         
         using var reader = new StreamReader(stream);
