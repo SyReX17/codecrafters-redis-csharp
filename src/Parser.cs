@@ -10,14 +10,8 @@ public class Parser
         BulkString = '$',
         Array = '*'
     }
-
-    public static object Parse(string respString)
-    {
-        var reader = new System.IO.StringReader(respString);
-        return Parse(reader);
-    }
     
-    private static object Parse(System.IO.StringReader reader)
+    public static object Parse(StreamReader reader)
     {
         var type = (RespType)reader.Read();
         switch (type)
@@ -33,7 +27,7 @@ public class Parser
         }
     }
     
-    private static string ReadLine(System.IO.StringReader reader)
+    private static string ReadLine(StreamReader reader)
     {
         var sb = new StringBuilder();
         while (true)
@@ -48,12 +42,12 @@ public class Parser
         }
     }
 
-    private static string ParseSingleString(System.IO.StringReader reader)
+    private static string ParseSingleString(StreamReader reader)
     {
         return ReadLine(reader);
     }
 
-    private static string ParseBulkString(System.IO.StringReader reader)
+    private static string ParseBulkString(StreamReader reader)
     {
         var len = int.Parse(ReadLine(reader));
         if (len < 0)
@@ -62,7 +56,7 @@ public class Parser
             return ReadLine(reader);
     }
 
-    private static object[] ParseArray(System.IO.StringReader reader)
+    private static object[] ParseArray(StreamReader reader)
     {
         var len = int.Parse(ReadLine(reader));
         if (len < 0)
