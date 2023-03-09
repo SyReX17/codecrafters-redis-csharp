@@ -3,7 +3,7 @@ using System.Net.Sockets;
 
 namespace codecrafters_redis;
 
-public class RedisTcpServer
+public class RedisServer
 {
     public void RunServer()
     {
@@ -15,7 +15,7 @@ public class RedisTcpServer
             {
                 var newClient = server.AcceptTcpClient();
 
-                Thread t = new Thread(HandleClient);
+                var t = new Thread(HandleClient);
                 t.Start(newClient);
             }
         }
@@ -33,13 +33,7 @@ public class RedisTcpServer
         using var reader = new StreamReader(stream);
         using var writer = new StreamWriter(stream);
         writer.AutoFlush = true;
-        var commands = reader.ReadToEnd();
-        Console.WriteLine(commands);
-        ParseResp(commands).HandleCommands(writer);
-    }
-
-    private string[] ParseResp(string input)
-    {
-        return input.Split("\r\n");
+        var request = reader.ReadToEnd();
+        CommandHandler.Handle(writer, Parser.Parse(request));
     }
 }
