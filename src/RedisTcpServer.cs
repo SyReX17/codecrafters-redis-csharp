@@ -33,13 +33,12 @@ public class RedisTcpServer
         using var reader = new StreamReader(stream);
         using var writer = new StreamWriter(stream);
         writer.AutoFlush = true;
-        while(reader.ReadLine() is {} line) 
-        {
-            if (line == "ping")
-            {
-                writer.Write("+PONG\r\n");
-                writer.Flush();
-            }
-        }
+        var commands = reader.ReadToEnd();
+        ParseResp(commands).HandleCommands(writer);
+    }
+
+    private string[] ParseResp(string input)
+    {
+        return input.Split("\r\n");
     }
 }
