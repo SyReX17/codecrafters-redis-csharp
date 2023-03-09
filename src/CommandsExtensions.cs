@@ -8,18 +8,16 @@ public static class CommandsExtensions
 
         while (i < args.Length)
         {
-            var output = args[i] switch
+            var output = "";
+            if (args[i] == "*1" && args[i + 2].ToLower().Contains("ping"))
             {
-                "*1" => args[i + 2].ToLower() switch
-                {
-                    "ping" => "+PONG\r\n"
-                },
-                "*2" => args[i + 2].ToLower() switch
-                {
-                    "echo" => $"+{args[i + 4]}\r\n"
-                }
-            };
-
+                output = "+PONG\r\n";
+            }
+            else if (args[i] == "*1" && args[i + 2].ToLower().Contains("echo"))
+            {
+                output = $"+{args[i + 4]}\r\n";
+            }
+            sw.WriteLine(output);
             i += 2;
         }
     }
