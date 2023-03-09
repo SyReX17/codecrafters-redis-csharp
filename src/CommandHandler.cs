@@ -9,7 +9,8 @@ public static class CommandHandler
         {
             response = ((string)commands[0]).ToLower() switch
             {
-                "echo" => $"+{((string)commands[1])}\r\n"
+                "echo" => $"+{((string)commands[1])}\r\n",
+                "ping" => "+PONG\r\n"
             };
         }
         else
