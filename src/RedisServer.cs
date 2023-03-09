@@ -33,7 +33,6 @@ public class RedisServer
         using var reader = new StreamReader(stream);
         using var writer = new StreamWriter(stream);
         writer.AutoFlush = true;
-        var request = reader.ReadToEnd();
         CommandHandler.Handle(writer, Parser.Parse(reader));
     }
 }
