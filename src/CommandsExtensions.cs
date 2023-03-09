@@ -17,8 +17,12 @@ public static class CommandsExtensions
             {
                 output = $"+{args[i + 4]}\r\n";
             }
-            sw.Write(output);
-            sw.Flush();
+
+            if (!string.IsNullOrEmpty(output))
+            {
+                sw.Write(output);
+                sw.Flush();
+            }
             i += 2;
         }
     }
