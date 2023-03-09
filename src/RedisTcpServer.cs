@@ -34,6 +34,7 @@ public class RedisTcpServer
         using var writer = new StreamWriter(stream);
         writer.AutoFlush = true;
         var commands = reader.ReadToEnd();
+        Console.WriteLine(commands);
         ParseResp(commands).HandleCommands(writer);
     }
 
