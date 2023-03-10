@@ -28,8 +28,7 @@ public static class Parser
         var sb = new StringBuilder();
         for (var i = 0; i < len; i++)
         {
-            var ch = reader.Read();
-            sb.Append((char)ch);
+            sb.Append((char)reader.Read());
         }
         
         return sb.ToString();
