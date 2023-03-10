@@ -30,7 +30,8 @@ public static class Parser
         {
             sb.Append((char)reader.Read());
         }
-        
+
+        reader.ReadLine();
         return sb.ToString();
     }
 
@@ -44,6 +45,7 @@ public static class Parser
         var len = int.Parse(reader.ReadLine());
         Console.WriteLine(len);
         var result = reader.ReadTo(len);
+        Console.WriteLine(result);
         
         return len < 0 ? null : result;
     }
