@@ -2,9 +2,9 @@ using System.Text;
 
 namespace codecrafters_redis;
 
-public class Parser
+public static class Parser
 {
-    private enum RespType
+    private enum FirstByte
     {
         SimpleString = '+',
         BulkString = '$',
@@ -13,52 +13,43 @@ public class Parser
     
     public static object Parse(StreamReader reader)
     {
-        var type = (RespType)reader.Read();
-        switch (type)
+        var type = (FirstByte)reader.Read();
+        return type switch
         {
-            case RespType.SimpleString:
-                return ParseSingleString(reader);
-            case RespType.BulkString:
-                return ParseBulkString(reader);
-            case RespType.Array:
-                return ParseArray(reader);
-            default:
-                throw new FormatException("Invalid RESP string format.");
-        }
+            FirstByte.SimpleString => ParseSingleString(reader),
+            FirstByte.BulkString => ParseBulkString(reader),
+            FirstByte.Array => ParseArray(reader),
+            _ => throw new FormatException("Invalid RESP string format.")
+        };
     }
     
-    private static string ReadLine(StreamReader reader)
+    private static string ReadTo(this StreamReader reader, int len)
     {
         var sb = new StringBuilder();
-        while (true)
+        for (var i = 0; i < len; i++)
         {
             var ch = reader.Read();
-            if (ch == '\r')
-            {
-                reader.Read();
-                return sb.ToString();
-            }
             sb.Append((char)ch);
         }
+        
+        return sb.ToString();
     }
 
     private static string ParseSingleString(StreamReader reader)
     {
-        return ReadLine(reader);
+        return reader.ReadLine() ?? "";
     }
 
     private static string ParseBulkString(StreamReader reader)
     {
-        var len = int.Parse(ReadLine(reader));
-        if (len < 0)
-            return null;
-        else 
-            return ReadLine(reader);
+        var len = int.Parse(reader.ReadLine()!);
+        
+        return len < 0 ? null : reader.ReadTo(len);
     }
 
     private static object[] ParseArray(StreamReader reader)
     {
-        var len = int.Parse(ReadLine(reader));
+        var len = int.Parse(reader.ReadLine()!);
         if (len < 0)
             return null;
 
