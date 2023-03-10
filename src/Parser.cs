@@ -41,9 +41,11 @@ public static class Parser
 
     private static string ParseBulkString(StreamReader reader)
     {
-        var len = int.Parse(reader.ReadLine()!);
+        var len = int.Parse(reader.ReadLine());
+        Console.WriteLine(len);
+        var result = reader.ReadTo(len);
         
-        return len < 0 ? null : reader.ReadTo(len);
+        return len < 0 ? null : result;
     }
 
     private static object[] ParseArray(StreamReader reader)
