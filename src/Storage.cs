@@ -4,15 +4,15 @@ namespace codecrafters_redis;
 
 public static class Storage
 {
-    private static ConcurrentDictionary<string, string> _cd = new();
+    private static readonly ConcurrentDictionary<string, string> Cd = new();
 
     public static void Set(string key, string value)
     {
-        _cd.AddOrUpdate(key, value, (key, value) => value);
+        Cd.AddOrUpdate(key, value, (key, value) => value);
     }
 
     public static string Get(string key)
     {
-        return _cd[key];
+        return Cd[key];
     }
 }
