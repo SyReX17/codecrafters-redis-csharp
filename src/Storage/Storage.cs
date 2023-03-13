@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 
-namespace codecrafters_redis;
+namespace codecrafters_redis.Storage;
 
 public static class Storage
 {

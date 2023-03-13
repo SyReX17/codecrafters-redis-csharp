@@ -1,11 +1,12 @@
 using System.Net;
 using System.Net.Sockets;
+using codecrafters_redis.RESP;
 
 namespace codecrafters_redis;
 
-public class RedisServer
+public class ServerListener
 {
-    public void RunServer()
+    public void RunListener()
     {
         var server = new TcpListener(IPAddress.Any, 6379);
         server.Start();
@@ -15,7 +16,7 @@ public class RedisServer
             {
                 var newClient = server.AcceptTcpClient();
 
-                var t = new Thread(HandleClient);
+                var t = new Thread(HandleClient!);
                 t.Start(newClient);
             }
         }

@@ -1,23 +1,26 @@
+using codecrafters_redis.RESP.Enums;
+using codecrafters_redis.RESP.Models;
+
 namespace codecrafters_redis;
 
 public static class CommandHandler
 {
-    public static void Handle(StreamWriter sw, object command)
+    public static void Handle(StreamWriter sw, RespRequest respRequest)
     {
         var response = "";
-        if (command is object[] commands)
+        if (respRequest.Type == RespType.Array)
         {
-            response = ((string)commands[0]).ToLower() switch
+            response = respRequest.Values![0].Value!.ToLower() switch
             {
-                "echo" => $"+{(string)commands[1]}\r\n",
+                "echo" => $"+{respRequest.Values![2].Value}\r\n",
                 "ping" => "+PONG\r\n",
-                "set" => HandleSet(commands[1..]),
-                "get" => HandleGet(commands[1..])
+                "set" => HandleSet(respRequest.Values![1..]),
+                "get" => HandleGet(respRequest.Values![1..])
             };
         }
         else
         {
-            response = ((string)command).ToLower() switch
+            response = respRequest.Values![0].Value!.ToLower() switch
             {
                 "ping" => "+PONG\r\n"
             };
@@ -26,18 +29,18 @@ public static class CommandHandler
         sw.Write(response);
     }
 
-    private static string HandleSet(object[] args)
+    private static string HandleSet(RespRequest[] args)
     {
-        var key = (string)args[0];
-        var value = (string)args[1];
-        Storage.Set(key, value);
+        var key = args[0].Value;
+        var value = args[1].Value;
+        Storage.Storage.Set(key!, value!);
         return "+OK\r\n";
     }
     
-    private static string HandleGet(object[] args)
+    private static string HandleGet(RespRequest[] args)
     {
-        var key = (string)args[0];
-        var result = Storage.Get(key);
+        var key = args[0].Value;
+        var result = Storage.Storage.Get(key!);
         return $"+{result}\r\n";
     }
     
