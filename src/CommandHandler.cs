@@ -33,7 +33,8 @@ public static class CommandHandler
     {
         var key = args[0].Value;
         var value = args[1].Value;
-        Storage.Storage.Set(key!, value!);
+        int? px = args.Length > 3 ? Convert.ToInt32(args[4]) : null;
+        Storage.Storage.Set(key!, value!, px);
         return "+OK\r\n";
     }
     

@@ -1,18 +1,26 @@
-using System.Collections.Concurrent;
+using System.Runtime.Caching;
 
 namespace codecrafters_redis.Storage;
 
 public static class Storage
 {
-    private static readonly ConcurrentDictionary<string, string> Cd = new();
+    private static readonly MemoryCache MC = new MemoryCache("mc");
 
-    public static void Set(string key, string value)
+    public static void Set(string key, string value, int? px)
     {
-        Cd.AddOrUpdate(key, value, (key, value) => value);
+        if (px == null)
+        {
+            var policy = new CacheItemPolicy();
+            MC.Set(key, value, policy);
+            return;
+        }
+        
+        var expire = new DateTimeOffset().AddMilliseconds(Convert.ToDouble(px));
+        MC.Set(key, value, expire);
     }
 
-    public static string Get(string key)
+    public static string? Get(string key)
     {
-        return Cd[key];
+        return MC[key].ToString();
     }
 }
