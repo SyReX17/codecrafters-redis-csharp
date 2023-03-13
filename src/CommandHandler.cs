@@ -12,7 +12,7 @@ public static class CommandHandler
         {
             response = respRequest.Values![0].Value!.ToLower() switch
             {
-                "echo" => $"+{respRequest.Values![2].Value}\r\n",
+                "echo" => $"+{respRequest.Values![1].Value}\r\n",
                 "ping" => "+PONG\r\n",
                 "set" => HandleSet(respRequest.Values![1..]),
                 "get" => HandleGet(respRequest.Values![1..])
