@@ -18,7 +18,8 @@ public static class Storage
 
     public static string? Get(string key)
     {
-        return CD[key];
+        CD.TryGetValue(key, out var value);
+        return value;
     }
 
     public static async Task AddWithExpire(string key, string value, int px)
