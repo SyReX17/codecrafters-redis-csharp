@@ -8,11 +8,12 @@ public static class Storage
 
     public static void Set(string key, string value, int? px)
     {
-        CD.TryAdd(key, value);
         if (px != null)
         {
-            HandleExpire(key, (int)px);
+            AddWithExpire(key, value, (int)px);
+            return;
         }
+        CD.TryAdd(key, value);
     }
 
     public static string? Get(string key)
@@ -20,8 +21,9 @@ public static class Storage
         return CD[key];
     }
 
-    public static async Task HandleExpire(string key, int px)
+    public static async Task AddWithExpire(string key, string value, int px)
     {
+        CD.TryAdd(key, value);
         var timer = new Timer(state =>
         {
             CD.TryRemove(key, out _);
