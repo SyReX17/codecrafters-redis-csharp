@@ -71,7 +71,7 @@ public static class CommandHandler
         
         return new RespValue
         {
-            Type = RespType.SimpleString,
+            Type = RespType.BulkString,
             Value = result
         };
     }
