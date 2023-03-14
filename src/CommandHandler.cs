@@ -54,7 +54,7 @@ public static class CommandHandler
     {
         var key = args[0].Value;
         var value = args[1].Value;
-        int? px = args.Length > 3 ? Convert.ToInt32(args[4]) : null;
+        int? px = args.Length > 3 ? Convert.ToInt32(args[3]) : null;
         Storage.Storage.Set(key!, value!, px);
         
         return new RespValue

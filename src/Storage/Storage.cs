@@ -8,12 +8,24 @@ public static class Storage
 
     public static void Set(string key, string value, int? px)
     {
+        CD.TryAdd(key, value);
         
-        CD.AddOrUpdate(key, value, (key, value) => value);
+        if (px != null)
+        {
+            HandleExpire(key, (int)px);
+        }
     }
 
     public static string? Get(string key)
     {
-        return CD[key].ToString();
+        return CD[key];
+    }
+
+    public static async Task HandleExpire(string key, int px)
+    {
+        var timer = new Timer(state =>
+        {
+            CD.TryRemove(key, out _);
+        }, null, TimeSpan.FromMilliseconds(px), Timeout.InfiniteTimeSpan);
     }
 }
