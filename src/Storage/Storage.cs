@@ -19,7 +19,7 @@ public static class Storage
     public static string? Get(string key)
     {
         CD.TryGetValue(key, out var value);
-        return value;
+        return string.IsNullOrEmpty(value) ? null : value;
     }
 
     public static async Task AddWithExpire(string key, string value, int px)
