@@ -19,6 +19,7 @@ public static class Storage
     public static string? Get(string key)
     {
         CD.TryGetValue(key, out var value);
+        
         return string.IsNullOrEmpty(value) ? null : value;
     }
 
