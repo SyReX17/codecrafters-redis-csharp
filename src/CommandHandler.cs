@@ -54,13 +54,7 @@ public static class CommandHandler
     {
         var key = args[0].Value;
         var value = args[1].Value;
-        
-        foreach (var respValue in args)
-        {
-            Console.WriteLine($"{respValue.Type}: {respValue.Value}");
-        }
-        
-        int? px = args.Length > 3 ? Convert.ToInt32(args[3]) : null;
+        int? px = args.Length > 3 ? Convert.ToInt32(args[3].Value) : null;
         Storage.Storage.Set(key!, value!, px);
         
         return new RespValue
