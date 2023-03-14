@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using System.Runtime.Caching;
 
 namespace codecrafters_redis.Storage;
 
@@ -10,7 +9,7 @@ public static class Storage
     public static void Set(string key, string value, int? px)
     {
         
-        CD.Add(key, value, (key, value) => value);
+        CD.AddOrUpdate(key, value, (key, value) => value);
     }
 
     public static string? Get(string key)

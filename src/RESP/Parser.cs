@@ -15,7 +15,7 @@ public static class Parser
         Error = '-'
     }
     
-    public static RespRequest Parse(StreamReader reader)
+    public static RespValue Parse(StreamReader reader)
     {
         var type = (FirstByte)reader.Read();
         return type switch
@@ -29,9 +29,9 @@ public static class Parser
         };
     }
 
-    private static RespRequest ParseSingleString(StreamReader reader)
+    private static RespValue ParseSingleString(StreamReader reader)
     {
-        var result = new RespRequest
+        var result = new RespValue
         {
             Type = RespType.SimpleString,
             Value = reader.ReadLine() ?? ""
@@ -40,12 +40,12 @@ public static class Parser
         return result;
     }
 
-    private static RespRequest ParseBulkString(StreamReader reader)
+    private static RespValue ParseBulkString(StreamReader reader)
     {
         var len = int.Parse(reader.ReadLine()!);
         var str = reader.ReadTo(len);
 
-        var result = new RespRequest
+        var result = new RespValue
         {
             Type = RespType.BulkString,
             Value = len < 0 ? null : str
@@ -54,19 +54,19 @@ public static class Parser
         return result;
     }
 
-    private static RespRequest ParseArray(StreamReader reader)
+    private static RespValue ParseArray(StreamReader reader)
     {
         var len = int.Parse(reader.ReadLine()!);
         if (len < 0)
             return null;
 
-        var values = new RespRequest[len];
+        var values = new RespValue[len];
         for (var i = 0; i < len; i++)
         {
             values[i] = Parse(reader);
         }
 
-        var result = new RespRequest
+        var result = new RespValue
         {
             Type = RespType.Array,
             Values = values
@@ -75,9 +75,9 @@ public static class Parser
         return result;
     }
 
-    private static RespRequest ParseInteger(StreamReader reader)
+    private static RespValue ParseInteger(StreamReader reader)
     {
-        var result = new RespRequest
+        var result = new RespValue
         {
             Type = RespType.Integer,
             Value = reader.ReadLine() ?? ""
@@ -86,9 +86,9 @@ public static class Parser
         return result;
     }
     
-    private static RespRequest ParseError(StreamReader reader)
+    private static RespValue ParseError(StreamReader reader)
     {
-        var result = new RespRequest
+        var result = new RespValue
         {
             Type = RespType.Error,
             Value = reader.ReadLine() ?? ""
